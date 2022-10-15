@@ -8,7 +8,7 @@
  * @param {string} imageSource - URL da imagem.
  * @returns {Element} Elemento de imagem do produto.
  */
- const createProductImageElement = (imageSource) => {
+const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
   img.src = imageSource;
@@ -49,11 +49,19 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   return section;
 };
 
+const createElementComputer = async () => {
+  const sectionItems = document.querySelector('.items');
+  const getElements = await fetchProducts('computador');
+  // console.log(getElements);
+  getElements.forEach((element) => {
+  sectionItems.appendChild(createProductItemElement(element));
+  });
+};
 /**
- * Função que recupera o ID do produto passado como parâmetro.
- * @param {Element} product - Elemento do produto.
- * @returns {string} ID do produto.
- */
+* Função que recupera o ID do produto passado como parâmetro.
+* @param {Element} product - Elemento do produto.
+* @returns {string} ID do produto.
+*/
 const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
 
 /**
@@ -64,7 +72,7 @@ const getIdFromProductItem = (product) => product.querySelector('span.id').inner
  * @param {string} product.price - Preço do produto.
  * @returns {Element} Elemento de um item do carrinho.
  */
-const createCartItemElement = ({ id, title, price }) => {
+const createCartItemElement = async ({ id, title, price }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
@@ -72,4 +80,6 @@ const createCartItemElement = ({ id, title, price }) => {
   return li;
 };
 
-window.onload = () => { };
+window.onload = async () => {
+  createElementComputer();
+};
