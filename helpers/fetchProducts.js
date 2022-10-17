@@ -11,10 +11,10 @@ const fetchProducts = async (item) => {
     }
     // console.log(objectJson);
   } catch (error) {
-    return 'error';
+    return error;
   }
 };
-fetchProducts('computador');
+// fetchProducts('computador');
 if (typeof module !== 'undefined') {
   module.exports = {
     fetchProducts,
