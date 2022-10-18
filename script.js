@@ -37,20 +37,19 @@ const createCustomElement = (element, className, innerText) => {
  * @param {string} product.thumbnail - URL da imagem do produto.
  * @returns {Element} Elemento de produto.
  */
-const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
+// const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
+
+const cartItemClickListener = (event) => {
+  event.target.remove();
+};
 
 const createCartItemElement = async ({ id, title, price }) => {
   const li = document.createElement('li');
   document.getElementsByClassName('cart__items')[0].appendChild(li);
   li.className = 'cart__item';
   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', cartItemClickListener);
   return li;
-};
-const cartItemClickListener = async ({ id }) => {
-  const container = document.querySelector('.cart__items');
-  const objectJson = await fetchItem(id);
-  console.log(container.appendChild(await createCartItemElement(objectJson)));
 };
 
 const addInCar = async (event) => {
