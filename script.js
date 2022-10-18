@@ -1,5 +1,5 @@
 // Esse tipo de comentário que estão antes de todas as funções são chamados de JSdoc,
-// experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições! 
+// experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições
 
 // Fique a vontade para modificar o código já escrito e criar suas próprias funções!
 
@@ -37,6 +37,27 @@ const createCustomElement = (element, className, innerText) => {
  * @param {string} product.thumbnail - URL da imagem do produto.
  * @returns {Element} Elemento de produto.
  */
+const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
+
+const createCartItemElement = async ({ id, title, price }) => {
+  const li = document.createElement('li');
+  document.getElementsByClassName('cart__items')[0].appendChild(li);
+  li.className = 'cart__item';
+  li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
+  // li.addEventListener('click', cartItemClickListener);
+  return li;
+};
+const cartItemClickListener = async ({ id }) => {
+  const container = document.querySelector('.cart__items');
+  const objectJson = await fetchItem(id);
+  console.log(container.appendChild(await createCartItemElement(objectJson)));
+};
+
+const addInCar = async (event) => {
+  const idProduct = await fetchItem(event.target.value);
+  createCartItemElement(idProduct);
+};
+
 const createProductItemElement = ({ id, title, thumbnail }) => {
   const section = document.createElement('section');
   section.className = 'item';
@@ -44,25 +65,23 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   section.appendChild(createCustomElement('span', 'item_id', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
-  return section;
+  const button = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
+  button.value = id;
+  button.addEventListener('click', addInCar);
+  section.appendChild(button);
+  document.getElementsByClassName('items')[0].appendChild(section);
 };
 
-const createElementComputer = async () => {
-  const sectionItems = document.querySelector('.items');
-  const getElements = await fetchProducts('computador');
-  // console.log(getElements);
-  getElements.forEach((element) => {
-  sectionItems.appendChild(createProductItemElement(element));
-  });
+const createItem = async () => {
+  const json = await fetchProducts('computador');
+  json.forEach((element) => createProductItemElement(element));
 };
+
 /**
 * Função que recupera o ID do produto passado como parâmetro.
 * @param {Element} product - Elemento do produto.
 * @returns {string} ID do produto.
 */
-const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
 
 /**
  * Função responsável por criar e retornar um item do carrinho.
@@ -72,14 +91,13 @@ const getIdFromProductItem = (product) => product.querySelector('span.id').inner
  * @param {string} product.price - Preço do produto.
  * @returns {Element} Elemento de um item do carrinho.
  */
-const createCartItemElement = async ({ id, title, price }) => {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-};
+
+// const addItemInCar = async (valor) => {
+//   const a = document.querySelector('.cart__items');
+//   const objectJson = await fetchItem(valor);
+//   console.log(objectJson);
+// };
 
 window.onload = async () => {
-  createElementComputer();
+  createItem();
 };
