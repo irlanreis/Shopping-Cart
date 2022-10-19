@@ -35,4 +35,4 @@ describe('1 - Teste a função fetchProducts', () => {
   })
 });
 
-// global.fetch = jest.fn(fetchProducts);f
+// global.fetch = jest.fn(fetchProducts);
