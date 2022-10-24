@@ -56,15 +56,14 @@ const addInCar = async (event) => {
   const objProduct = await fetchItem(idProduct);
   createCartItemElement(objProduct);
 
-  saveCartItems(idProduct);
+  saveCartItems(objProduct);
 };
 
 const loadCartItem = () => {
   const local = getSavedCartItems();
   
-  local.forEach(async (item) => {
-    const objProduct = await fetchItem(item);
-    createCartItemElement(objProduct);
+  local.forEach((item) => {
+    createCartItemElement(item);
   });
 };
 
