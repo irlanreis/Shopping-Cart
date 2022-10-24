@@ -1,7 +1,7 @@
 // Esse tipo de comentário que estão antes de todas as funções são chamados de JSdoc,
 // experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições
-
 // Fique a vontade para modificar o código já escrito e criar suas próprias funções!
+const olCartItems = document.querySelector('.cart__items');
 
 /**
  * Função responsável por criar e retornar o elemento de imagem do produto.
@@ -39,22 +39,35 @@ const createCustomElement = (element, className, innerText) => {
  */
 // const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
 
-const cartItemClickListener = (event) => {
+const cartItemRemove = (event) => {
   event.target.remove();
 };
 
 const createCartItemElement = async ({ id, title, price }) => {
   const li = document.createElement('li');
-  document.getElementsByClassName('cart__items')[0].appendChild(li);
   li.className = 'cart__item';
   li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
-  li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', cartItemRemove);
+  document.getElementsByClassName('cart__items')[0].appendChild(li);
   return li;
 };
 
 const addInCar = async (event) => {
-  const idProduct = await fetchItem(event.target.value);
-  createCartItemElement(idProduct);
+  const idProduct = event.target.value;
+
+  const objProduct = await fetchItem(idProduct);
+  createCartItemElement(objProduct);
+
+  saveCartItems(idProduct);
+};
+
+const loadCartItem = () => {
+  const local = getSavedCartItems();
+  
+  local.forEach(async (item) => {
+    const objProduct = await fetchItem(item);
+    createCartItemElement(objProduct);
+  });
 };
 
 const createProductItemElement = ({ id, title, thumbnail }) => {
@@ -99,4 +112,14 @@ const createItem = async () => {
 
 window.onload = async () => {
   createItem();
+  loadCartItem();
 };
+
+// clicar em adicionar ao carrinho
+// const saveContantLocalStorege = () => {
+//   cartProduct.forEach((product) => {
+//     saveProducts.push(product.innerHTML);
+//   });
+//   saveCartItems(saveProducts);
+//   saveProducts = [];
+// };
