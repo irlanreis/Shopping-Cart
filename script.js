@@ -1,6 +1,7 @@
 // Esse tipo de comentário que estão antes de todas as funções são chamados de JSdoc,
 // experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições
 // Fique a vontade para modificar o código já escrito e criar suas próprias funções!
+
 /**
  * Função responsável por criar e retornar o elemento de imagem do produto.
  * @param {string} imageSource - URL da imagem.
@@ -50,24 +51,29 @@ const createCartItemElement = async ({ id, title, price }) => {
   return li;
 };
 
-const addInCar = async (event) => {
-  const idProduct = event.target.value;
-
-  const objProduct = await fetchItem(idProduct);
-  createCartItemElement(objProduct);
-
-  saveCartItems(objProduct);
+const addInCart = (id, title, price) => {
+  // pegar itens de localStorage
+  const items = getSavedCartItems();
+  // empurrar item para o array de itens;
+  const item = {
+    id,
+    title,
+    price,
+  };
+  items.push(item);
+  // salvar itens lo localStorage
+  saveCartItems(items);
+  createCartItemElement(item);
 };
 
 const loadCartItem = () => {
   const local = getSavedCartItems();
-  
   local.forEach((item) => {
     createCartItemElement(item);
   });
 };
 
-const createProductItemElement = ({ id, title, thumbnail }) => {
+const createProductItemElement = ({ id, title, thumbnail, price }) => {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -76,7 +82,9 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   section.appendChild(createProductImageElement(thumbnail));
   const button = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
   button.value = id;
-  button.addEventListener('click', addInCar);
+  button.addEventListener('click', () => {
+    addInCart(id, title, price);
+  });
   section.appendChild(button);
   document.getElementsByClassName('items')[0].appendChild(section);
 };
@@ -101,22 +109,14 @@ const createItem = async () => {
  * @returns {Element} Elemento de um item do carrinho.
  */
 
-// const addItemInCar = async (valor) => {
-//   const a = document.querySelector('.cart__items');
-//   const objectJson = await fetchItem(valor);
-//   console.log(objectJson);
+// const initLocalStorage = () => {
+//   if (!localStorage.getItem('cartItems')) {
+//     saveCartItems([]);
+//   }
 // };
 
 window.onload = async () => {
+  // initLocalStorage();
   createItem();
   loadCartItem();
 };
-
-// clicar em adicionar ao carrinho
-// const saveContantLocalStorege = () => {
-//   cartProduct.forEach((product) => {
-//     saveProducts.push(product.innerHTML);
-//   });
-//   saveCartItems(saveProducts);
-//   saveProducts = [];
-// };

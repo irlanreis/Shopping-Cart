@@ -1,17 +1,7 @@
-const pegarLocal = () => JSON.parse(localStorage.getItem('cartItems'));
-
 const saveCartItems = (obj) => {
-  const local = pegarLocal();
-
-  if (!local) {
-    const novoLocal = [obj];
-    localStorage.setItem('cartItems', JSON.stringify(novoLocal));
-  } else {
-    const novoLocal = [...local, obj];
-    localStorage.setItem('cartItems', JSON.stringify(novoLocal));
-  }
+  if (!obj) throw new Error('Passe algum parâmetro');
+  localStorage.setItem('cartItems', JSON.stringify(obj));
 };
-
 if (typeof module !== 'undefined') {
   module.exports = saveCartItems;
 }
