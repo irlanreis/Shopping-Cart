@@ -1,7 +1,9 @@
 // Esse tipo de comentário que estão antes de todas as funções são chamados de JSdoc,
 // experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições
-// Fique a vontade para modificar o código já escrito e criar suas próprias funções!
 
+// Fique a vontade para modificar o código já escrito e criar suas próprias funções!
+const buttonEmptyCart = document.querySelector('.empty-cart');
+const cartList = document.querySelector('.cart__items');
 /**
  * Função responsável por criar e retornar o elemento de imagem do produto.
  * @param {string} imageSource - URL da imagem.
@@ -40,6 +42,13 @@ const createCustomElement = (element, className, innerText) => {
 
 const cartItemRemove = (event) => {
   event.target.remove();
+  const separeteByPipe = event.target.innerText.split('|');
+  const itemSeparete = separeteByPipe[0].split(':');
+  const separeteID = itemSeparete[1].trim();
+  
+  const containerLocalStorege = getSavedCartItems();
+  const filtredItems = containerLocalStorege.filter((element) => element.id !== separeteID);
+  saveCartItems(filtredItems);
 };
 
 const createCartItemElement = async ({ id, title, price }) => {
@@ -68,6 +77,7 @@ const addInCart = (id, title, price) => {
 
 const loadCartItem = () => {
   const local = getSavedCartItems();
+  console.log(local);
   local.forEach((item) => {
     createCartItemElement(item);
   });
@@ -108,15 +118,15 @@ const createItem = async () => {
  * @param {string} product.price - Preço do produto.
  * @returns {Element} Elemento de um item do carrinho.
  */
-
-// const initLocalStorage = () => {
-//   if (!localStorage.getItem('cartItems')) {
-//     saveCartItems([]);
-//   }
-// };
+const addListenerEmptyCartButton = () => {
+  buttonEmptyCart.addEventListener('click', () => {
+    saveCartItems([]);
+    cartList.innerHTML = null;
+  });
+};
 
 window.onload = async () => {
-  // initLocalStorage();
   createItem();
   loadCartItem();
+  addListenerEmptyCartButton();
 };
